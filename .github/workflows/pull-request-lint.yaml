@@ -20,9 +20,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Install development dependencies
-        run: |
-              pip install -r requirements-dev.txt
-              pip install --upgrade pytest-xdist
+        run: pip install -r requirements-dev.txt
+      - name: Upgrade pytest
+        run: pip install --upgrade pytest 
+      - name: parallel test
+        run: pytest -n auto
       - name: Run pylint
         run: pylint taskman
       - name: Upgrade pytest
