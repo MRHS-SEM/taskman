@@ -1,3 +1,5 @@
+import pytest
+
 def factorial(n):
     """Compute the factorial of n."""
     if n < 0:
