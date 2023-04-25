@@ -23,7 +23,5 @@ jobs:
         run: pip install -r requirements-dev.txt
       - name: Run pylint
         run: pylint taskman
-      - name: Upgrade pytest
-        run: pip install --upgrade pytest 
       - name: parallel test
         run: pytest -n auto
