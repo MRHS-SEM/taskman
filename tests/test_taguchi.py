@@ -15,4 +15,4 @@ def test_factorial():
     assert factorial(2) == 2
     assert factorial(5) == 120
     with pytest.raises(ValueError):
-        factorial(-1)
+        factorial(-1)  
