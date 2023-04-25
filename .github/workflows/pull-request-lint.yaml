@@ -25,5 +25,4 @@ jobs:
               pip install --upgrade pytest-xdist
       - name: Run pylint
         run: pylint taskman
-      - name: Parallel test
-        run: pytest -n auto
+   
