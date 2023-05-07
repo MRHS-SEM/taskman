@@ -36,6 +36,11 @@ jobs:
       - name: Run pytest
         run: |
           pytest --cov=taskman -n auto
+      - name: Scan for security vulnerabilities
+        uses: snyk/actions/python@master
+        with:
+          file: requirements.txt
+          token: ${{ secrets.SNYK_TOKEN }}
       - name: Upload coverage report to Codecov
         uses: codecov/codecov-action@v2
         with:
