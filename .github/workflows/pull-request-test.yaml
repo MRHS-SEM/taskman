@@ -19,10 +19,6 @@ jobs:
           node-version: '14'
       - name: Install snyk
         run: npm install -g snyk
-      - name: Check snyk version
-        run: snyk --version
-      - name: Authenticate with Snyk
-        run: snyk auth ${{ secrets.SNYK_TOKEN }}
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -36,6 +32,10 @@ jobs:
       - name: Run pytest
         run: |
           pytest --cov=taskman -n auto
+      - name: Check snyk version
+        run: snyk --version
+      - name: Authenticate with Snyk
+        run: snyk auth ${{ secrets.SNYK_TOKEN }}
       - name: Scan for security vulnerabilities
         uses: snyk/actions/python@master
         with:
@@ -45,11 +45,6 @@ jobs:
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-      - name: Scan for security vulnerabilities
-        uses: snyk/actions/python@master
-        with:
-          file: requirements.txt
-          token: ${{ secrets.SNYK_TOKEN }}
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
