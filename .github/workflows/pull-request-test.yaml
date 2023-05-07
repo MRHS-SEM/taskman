@@ -30,7 +30,7 @@ jobs:
       #So far the code for Assignment1
 
       #For exercise 2 from here
-      
+
       #Submit the results to a service measuring the code by codecov
       - name: Upload coverage report to Codecov
         uses: codecov/codecov-action@v2
@@ -44,7 +44,7 @@ jobs:
           node-version: '14'
       - name: Install snyk
         run: npm install -g snyk
-      - name: Scan for security vulnerabilities1
+      - name: Scan for security vulnerabilities
         run: |
           snyk auth ${{ secrets.SNYK_TOKEN }}
           snyk test --file=requirements.txt
