@@ -21,7 +21,7 @@ jobs:
       - name: Install development dependencies
         run: pip install -r requirements-dev.txt
       - name: Run pytest and generate coverage report
-        run: pytest --cov=my_package tests/ -n auto
+        run: pytest --cov=taskman/ -n auto
         env:
           CI: true
       - name: Upload coverage report to Codecov
