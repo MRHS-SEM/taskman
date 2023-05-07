@@ -34,13 +34,17 @@ jobs:
           pytest --cov=taskman -n auto
       - name: Check snyk version
         run: snyk --version
-      - name: Authenticate with Snyk
-        run: snyk auth ${{ secrets.SNYK_TOKEN }}
-      - name: Scan for security vulnerabilities
-        uses: snyk/actions/python@master
-        with:
-          file: requirements.txt
-          token: ${{ secrets.SNYK_TOKEN }}
+      - name: Scan for security vulnerabilities1
+        run: |
+          snyk auth ${{ secrets.SNYK_TOKEN }}
+          snyk test --file=requirements.txt
+      #- name: Authenticate with Snyk
+      #  run: snyk auth ${{ secrets.SNYK_TOKEN }}
+      #- name: Scan for security vulnerabilities2
+      #  uses: snyk/actions/python@master
+      #  with:
+      #    file: requirements.txt
+      #    token: ${{ secrets.SNYK_TOKEN }}
       - name: Upload coverage report to Codecov
         uses: codecov/codecov-action@v2
         with:
