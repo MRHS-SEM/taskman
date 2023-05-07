@@ -1,4 +1,4 @@
-name: Run test suite on CI/CD PR
+name: Run test suite on PR
 
 on:
   pull_request:
@@ -7,20 +7,25 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      CI: true
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: set up Python 
+      - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
       - name: Install development dependencies
-        run: pip install -r requirements-dev.txt
+        run: |
+          pip install -r requirements-dev.txt
       - name: Run pytest
-        run: pytest --cov=taskman -n auto
+        run: |
+          pytest --cov=taskman -n auto
       - name: Upload coverage report to Codecov
         uses: codecov/codecov-action@v2
         with:
@@ -40,4 +45,3 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           CR_PAT: ${{ secrets.CR_PAT }}
-          
