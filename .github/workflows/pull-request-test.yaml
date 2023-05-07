@@ -19,6 +19,8 @@ jobs:
           node-version: '14'
       - name: Install snyk
         run: npm install -g snyk
+      - name: Check snyk version
+        run: snyk --version
       - name: Authenticate with Snyk
         run: snyk auth ${{ secrets.SNYK_TOKEN }}
       - name: Set up Python
