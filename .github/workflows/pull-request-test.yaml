@@ -8,11 +8,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Set up Python environment
+      - name: set up Python 
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
@@ -20,12 +19,8 @@ jobs:
         run: pip install -r requirements.txt
       - name: Install development dependencies
         run: pip install -r requirements-dev.txt
-      - name: Run pytest and generate coverage report
-        env:
-          CI: true
-        run: |
-          pytest --cov=taskman tests/ -n auto
-          coverage report -m
+      - name: Run pytest
+        run: pytest --cov=taskman -n auto
       - name: Upload coverage report to Codecov
         uses: codecov/codecov-action@v2
         with:
