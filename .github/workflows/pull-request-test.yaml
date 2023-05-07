@@ -21,9 +21,11 @@ jobs:
       - name: Install development dependencies
         run: pip install -r requirements-dev.txt
       - name: Run pytest and generate coverage report
-        run: pytest --cov=taskman -n auto
         env:
           CI: true
+        run: |
+          pytest --cov=taskman tests/ -n auto
+          coverage report -m
       - name: Upload coverage report to Codecov
         uses: codecov/codecov-action@v2
         with:
@@ -43,3 +45,4 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           CR_PAT: ${{ secrets.CR_PAT }}
+          
