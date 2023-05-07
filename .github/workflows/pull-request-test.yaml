@@ -26,7 +26,7 @@ jobs:
       #incorporate pytest-cov into our test run.
       - name: Run pytest
         run: |
-          pytest --cov=taskman -n auto 
+          pytest --cov=taskman --cov-report=xml -n auto 
       #So far the code for Assignment1
 
       #For exercise 2 from here
