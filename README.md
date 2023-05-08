@@ -1,5 +1,5 @@
 # Taskman
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/MRHS-SEM/taskman)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/mrhssem/taskman)
 
 
