@@ -1,4 +1,4 @@
-FROM ghcr.io/MRHS-SEM/taskman:latest
+FROM gitpod/workspace-full:latest
 
 USER gitpod
 
