@@ -78,6 +78,5 @@ jobs:
         with:
           service: 'taskman-mrhs-sem'
           tags: ghcr.io/mrhs-sem/my_package:${{ github.sha }}
-
       - name: 'Use output'
         run: 'curl "${{ steps.deploy.outputs.url }}"'
