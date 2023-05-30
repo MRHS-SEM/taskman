@@ -77,7 +77,7 @@ jobs:
         uses: 'google-github-actions/deploy-cloudrun@v1'
         with:
           service: 'taskman-mrhs-sem'
-          tags: ghcr.io/my-username/my-package:${{ github.sha }}
+          tags: ghcr.io/mrhs-sem/my_package:${{ github.sha }}
 
       - name: 'Use output'
         run: 'curl "${{ steps.deploy.outputs.url }}"'
