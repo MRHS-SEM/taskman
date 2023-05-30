@@ -9,8 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Set up Python
@@ -62,3 +65,19 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/mrhs-sem/my_package:${{ github.sha }}
+
+      #For exercise 3 from here
+      - name: Authenticate with Google Cloud
+        uses: 'google-github-actions/auth@v1'
+        with:
+          workload_identity_provider: 'projects/70756149774/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
+          service_account: 'hshn-devsecops-service-account@hs-heilbronn-devsecops.iam.gserviceaccount.com'
+
+      - id: 'deploy'
+        uses: 'google-github-actions/deploy-cloudrun@v1'
+        with:
+          service: 'taskman-mrhs-sem'
+          tags: ghcr.io/my-username/my-package:${{ github.sha }}
+
+      - name: 'Use output'
+        run: 'curl "${{ steps.deploy.outputs.url }}"'
