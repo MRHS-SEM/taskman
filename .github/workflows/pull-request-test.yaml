@@ -79,5 +79,5 @@ jobs:
           service: 'taskman-mrhs-sem'
           tags: ghcr.io/mrhs-sem/my_package:4e5787df3ce82cc6f250b96287eb74efeace2f45
 
-      - name: 'Use output'
-        run: 'curl "${{ steps.deploy.outputs.url }}"'
+      # - name: 'Use output'
+      # run: 'curl "${{ steps.deploy.outputs.url }}"'
