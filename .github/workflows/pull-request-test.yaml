@@ -93,6 +93,6 @@ jobs:
         with:
           service: 'taskman-mrhs-sem'
           image: gcr.io/cloudrun/placeholder@sha256:01425a1414d0027848b40bdf6c5ed5497508051f0281c16003b2c32fcc08d9d2
-
+          region: europe-west3
       # - name: 'Use output'
       #   run: 'curl "${{ steps.deploy.outputs.url }}"'
