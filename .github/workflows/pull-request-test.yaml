@@ -73,24 +73,18 @@ jobs:
           workload_identity_provider: 'projects/70756149774/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
           service_account: 'hshn-devsecops-service-account@hs-heilbronn-devsecops.iam.gserviceaccount.com'
 
-      - name: Build and push Docker image to Google Artifact Registry
-        run: |
-          docker build -t local-image .
-          docker tag local-image europe-west3-docker.pkg.dev/hs-heilbronn-devsecops/cloud-run-source-deploy/taskman-mrhs-sem
-          docker push europe-west3-docker.pkg.dev/hs-heilbronn-devsecops/cloud-run-source-deploy/taskman-mrhs-sem
+      # - name: Build and push Docker image to Google Artifact Registry
+      #   run: |
+      #     docker build -t local-image .
+      #     docker tag local-image europe-west3-docker.pkg.dev/hs-heilbronn-devsecops/cloud-run-source-deploy/taskman-mrhs-sem
+      #     docker push europe-west3-docker.pkg.dev/hs-heilbronn-devsecops/cloud-run-source-deploy/taskman-mrhs-sem
 
       - id: 'deploy'
         uses: 'google-github-actions/deploy-cloudrun@v1'
         with:
           service: 'taskman-mrhs-sem'
-          image: europe-west3-docker.pkg.dev/hs-heilbronn-devsecops/cloud-run-source-deploy/taskman-mrhs-sem
+          image: europe-west3-docker.pkg.dev/hs-heilbronn-devsecops/cloud-run-source-deploy/taskman-mrhs-sem@sha256:fcf01556d0888ecfff73c54aa05afad5aaa7b09e91b7f1cb488604bd581bfe3a
           region: europe-west3
 
-      # - id: 'deploy'
-      #   uses: 'google-github-actions/deploy-cloudrun@v1'
-      #   with:
-      #     service: 'taskman-mrhs-sem'
-      #     image: gcr.io/cloudrun/placeholder@sha256:01425a1414d0027848b40bdf6c5ed5497508051f0281c16003b2c32fcc08d9d2
-      #     region: europe-west3
       # - name: 'Use output'
       #   run: 'curl "${{ steps.deploy.outputs.url }}"'
