@@ -57,7 +57,7 @@ jobs:
       #   uses: docker/login-action@v1
       #   with:
       #     registry: gcr.io
-      #     username: _json_key
+      #     username: xxx
       #     password: ${{ secrets.GCR_SERVICE_ACCOUNT_KEY }}
 
       # - name: Build and push Docker image to Google Container Registry
@@ -92,7 +92,7 @@ jobs:
         uses: 'google-github-actions/deploy-cloudrun@v1'
         with:
           service: 'taskman-mrhs-sem'
-          image: 'gcr.io/cloudrun/placeholder@sha256:01425a1414d0027848b40bdf6c5ed5497508051f0281c16003b2c32fcc08d9d2'
+          image: gcr.io/cloudrun/placeholder@sha256:01425a1414d0027848b40bdf6c5ed5497508051f0281c16003b2c32fcc08d9d2
 
       # - name: 'Use output'
       #   run: 'curl "${{ steps.deploy.outputs.url }}"'
