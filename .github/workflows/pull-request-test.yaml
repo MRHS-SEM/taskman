@@ -76,14 +76,14 @@ jobs:
       - name: Build and push Docker image to Google Artifact Registry
         run: |
           docker build -t local-image .
-          docker tag local-image europe-west3-docker.pkg.dev/hs-heilbronn-devsecops/cloud-run-source-deploy/taskman-mrhs-sem:${{ github.sha }}
-          docker push europe-west3-docker.pkg.dev/hs-heilbronn-devsecops/cloud-run-source-deploy/taskman-mrhs-sem:${{ github.sha }}
-          
+          docker tag local-image europe-west3-docker.pkg.dev/hs-heilbronn-devsecops/cloud-run-source-deploy/taskman-mrhs-sem
+          docker push europe-west3-docker.pkg.dev/hs-heilbronn-devsecops/cloud-run-source-deploy/taskman-mrhs-sem
+
       - id: 'deploy'
         uses: 'google-github-actions/deploy-cloudrun@v1'
         with:
           service: 'taskman-mrhs-sem'
-          image: europe-west3-docker.pkg.dev/hs-heilbronn-devsecops/cloud-run-source-deploy/taskman-mrhs-sem:${{ github.sha }}
+          image: europe-west3-docker.pkg.dev/hs-heilbronn-devsecops/cloud-run-source-deploy/taskman-mrhs-sem
           region: europe-west3
 
       # - id: 'deploy'
