@@ -52,19 +52,19 @@ jobs:
           snyk auth ${{ secrets.SNYK_TOKEN }}
           snyk test --file=requirements.txt
 
-      # # #build a Github container and pushing it to the github container registry.
-      # - name: Login to GitHub Container Registry
-      #   uses: docker/login-action@v1
-      #   with:
-      #     registry: ghcr.io
-      #     username: ${{ github.actor }}
-      #     password: ${{ secrets.CR_PAT }}
-      # - name: Build and push Docker image
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     context: .
-      #     push: true
-      #     tags: ghcr.io/mrhs-sem/my_package:${{ github.sha }}
+      # #build a Github container and pushing it to the github container registry.
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.CR_PAT }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/mrhs-sem/my_package:${{ github.sha }}
 
       #For exercise 3 from here
       - name: Authenticate with Google Cloud
