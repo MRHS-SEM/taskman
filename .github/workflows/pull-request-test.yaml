@@ -52,7 +52,22 @@ jobs:
           snyk auth ${{ secrets.SNYK_TOKEN }}
           snyk test --file=requirements.txt
 
-      #build a container and pushing it to the github container registry.
+      # build a container and pushing it to the Google container registry.
+      # - name: Login to Google Container Registry
+      #   uses: docker/login-action@v1
+      #   with:
+      #     registry: gcr.io
+      #     username: _json_key
+      #     password: ${{ secrets.GCR_SERVICE_ACCOUNT_KEY }}
+
+      # - name: Build and push Docker image to Google Container Registry
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     context: .
+      #     push: true
+      #     tags: gcr.io/my-project/my-package:${{ github.sha }}
+
+      # #build a Github container and pushing it to the github container registry.
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
@@ -77,7 +92,7 @@ jobs:
         uses: 'google-github-actions/deploy-cloudrun@v1'
         with:
           service: 'taskman-mrhs-sem'
-          image: 'ghcr.io/mrhs-sem/my_package:${{ github.sha }}'
+          image: 'gcr.io/cloudrun/placeholder@sha256:01425a1414d0027848b40bdf6c5ed5497508051f0281c16003b2c32fcc08d9d2'
 
-      - name: 'Use output'
-        run: 'curl "${{ steps.deploy.outputs.url }}"'
+      # - name: 'Use output'
+      #   run: 'curl "${{ steps.deploy.outputs.url }}"'
