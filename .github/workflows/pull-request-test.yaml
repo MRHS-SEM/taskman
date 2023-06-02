@@ -74,11 +74,11 @@ jobs:
           service_account: 'hshn-devsecops-service-account@hs-heilbronn-devsecops.iam.gserviceaccount.com'
 
       # This time I didn't have permission to modify the Google Artifact Registry, so I separately built Docker and pushed it to Google Cloud without using the code below which can build and push automatically
-      # - name: Build and push Docker image to Google Artifact Registry
-      #   run: |
-      #     docker build -t local-image .
-      #     docker tag local-image europe-west3-docker.pkg.dev/hs-heilbronn-devsecops/cloud-run-source-deploy/taskman-mrhs-sem@sha256:cbd31cbc6c4e218d53abcbe565731755d37d6253d77b4138c4d5b8645af6385e
-      #     docker push europe-west3-docker.pkg.dev/hs-heilbronn-devsecops/cloud-run-source-deploy/taskman-mrhs-sem@sha256:cbd31cbc6c4e218d53abcbe565731755d37d6253d77b4138c4d5b8645af6385e
+      - name: Build and push Docker image to Google Artifact Registry
+        run: |
+          docker build -t local-image .
+          docker tag local-image europe-west3-docker.pkg.dev/hs-heilbronn-devsecops/cloud-run-source-deploy/taskman-mrhs-sem@sha256:cbd31cbc6c4e218d53abcbe565731755d37d6253d77b4138c4d5b8645af6385e
+          docker push europe-west3-docker.pkg.dev/hs-heilbronn-devsecops/cloud-run-source-deploy/taskman-mrhs-sem@sha256:cbd31cbc6c4e218d53abcbe565731755d37d6253d77b4138c4d5b8645af6385e
 
       - id: 'deploy'
         uses: 'google-github-actions/deploy-cloudrun@v1'
