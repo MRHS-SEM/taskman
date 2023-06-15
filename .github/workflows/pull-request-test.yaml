@@ -83,7 +83,9 @@ jobs:
         uses: 'google-github-actions/deploy-cloudrun@v1'
         with:
           service: 'taskman-mrhs-sem'
-          image: europe-west3-docker.pkg.dev/hs-heilbronn-devsecops/cloud-run-source-deploy/taskman-mrhs-sem@${{ steps.get_digest.outputs.digest }}
+          image: europe-west3-docker.pkg.dev/hs-heilbronn-devsecops/cloud-run-source-deploy/taskman-mrhs-sem@sha256:${{ steps.get_digest.outputs.digest }}
+
+
           region: europe-west3
           
             
