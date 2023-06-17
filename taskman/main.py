@@ -1,31 +1,40 @@
 # -*- coding: utf-8 -*-
 from uuid import uuid4
-from typing import List, Optional
+from typing import List
 from os import getenv
 from typing_extensions import Annotated
 
 from fastapi import Depends, FastAPI
+from pydantic import BaseModel
 from starlette.responses import RedirectResponse
-from .backends import Backend, RedisBackend, MemoryBackend, GCSBackend
-from .model import Task, TaskRequest
+from redis import Redis
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import (
+    BatchSpanProcessor,
+    ConsoleSpanExporter,
+)
+import fastapi
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 
 app = FastAPI()
 
-my_backend: Optional[Backend] = None
+
+def redis_client():
+    return Redis(host=getenv('REDIS_HOST', 'localhost'), port=6379, decode_responses=True)
 
 
-def get_backend() -> Backend:
-    global my_backend  # pylint: disable=global-statement
-    if my_backend is None:
-        backend_type = getenv('BACKEND', 'redis')
-        if backend_type == 'redis':
-            my_backend = RedisBackend()
-        elif backend_type == 'gcs':
-            my_backend = GCSBackend()
-        else:
-            my_backend = MemoryBackend()
-    return my_backend
+class TaskRequest(BaseModel):
+    name: str
+    description: str
 
+
+class Task(TaskRequest):
+    id: str
+
+# @app.get('/')
+# def redirect_to_tasks() -> None:
+# return {"message": "Hello Kashaf"}
 
 @app.get('/')
 def redirect_to_tasks() -> None:
@@ -33,31 +42,61 @@ def redirect_to_tasks() -> None:
 
 
 @app.get('/tasks')
-def get_tasks(backend: Annotated[Backend, Depends(get_backend)]) -> List[Task]:
-    keys = backend.keys()
+def get_tasks(redis: Annotated[Redis, Depends(redis_client)]) -> List[Task]:
+    keys = redis.keys()
 
     tasks = []
     for key in keys:
-        tasks.append(backend.get(key))
+        task = redis.json().get(key)
+        task_id = key[6:]
+        tasks.append(Task(
+            id=task_id,
+            name=task['name'],
+            description=task['description'],
+        ))
     return tasks
 
 
 @app.get('/tasks/{task_id}')
 def get_task(task_id: str,
-             backend: Annotated[Backend, Depends(get_backend)]) -> Task:
-    return backend.get(task_id)
+             redis: Annotated[Redis, Depends(redis_client)]) -> Task:
+    task = redis.json().get(f'tasks:{task_id}')
+    return Task(
+        id=task_id,
+        name=task['name'],
+        description=task['description'],
+    )
 
 
 @app.put('/tasks/{item_id}')
 def update_task(task_id: str,
-                request: TaskRequest,
-                backend: Annotated[Backend, Depends(get_backend)]) -> None:
-    backend.set(task_id, request)
+                item: TaskRequest,
+                redis: Annotated[Redis, Depends(redis_client)]) -> None:
+    redis.json().set(f'tasks:{task_id}', {
+        'name': item.name,
+        'description': item.description,
+    })
 
 
 @app.post('/tasks')
 def create_task(request: TaskRequest,
-                backend: Annotated[Backend, Depends(get_backend)]) -> str:
-    task_id = str(uuid4())
-    backend.set(task_id, request)
-    return task_id
+                redis: Annotated[Redis, Depends(redis_client)]) -> str:
+    task_id = uuid4()
+    redis.json().set(f'tasks:{task_id}', '$', {
+        'name': request.name,
+        'description': request.description,
+    })
+    return str(task_id)
+
+
+provider = TracerProvider()
+processor = BatchSpanProcessor(ConsoleSpanExporter())
+provider.add_span_processor(processor)
+
+# Sets the global default tracer provider
+trace.set_tracer_provider(provider)
+
+# Creates a tracer from the global tracer provider
+tracer = trace.get_tracer("my.tracer.name")
+
+FastAPIInstrumentor.instrument_app(app)
