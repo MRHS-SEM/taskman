@@ -32,4 +32,3 @@ dev_task.exec('uvicorn taskman.main:app --reload')
 
 
 project.synth()
-
