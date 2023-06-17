@@ -8,9 +8,11 @@ project = PythonProject(
     version="0.1.0",
     deps=[
         'fastapi',
-        'google-cloud-storage',
         'redis',
-        'uvicorn[standard]'
+        'uvicorn[standard]',
+        'opentelemetry-api',
+        'opentelemetry-sdk',
+        'opentelemetry-instrumentation-fastapi'
     ],
     dev_deps=[
         'attrs',
