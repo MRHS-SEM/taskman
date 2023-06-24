@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 from uuid import uuid4
-from typing import List
+from typing import List, Optional
 from os import getenv
 from typing_extensions import Annotated
 
 from fastapi import Depends, FastAPI
-from pydantic import BaseModel
 from starlette.responses import RedirectResponse
 from redis import Redis
 from opentelemetry import trace
@@ -14,8 +13,11 @@ from opentelemetry.sdk.trace.export import (
     BatchSpanProcessor,
     ConsoleSpanExporter,
 )
-import fastapi
+
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+
+import fastapi
+from pydantic import BaseModel
 
 app = FastAPI()
 
