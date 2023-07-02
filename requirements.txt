@@ -2,6 +2,7 @@
 fastapi
 google-cloud-storage
 opentelemetry-api
+opentelemetry-exporter-gcp-trace
 opentelemetry-instrumentation-fastapi
 opentelemetry-sdk
 redis

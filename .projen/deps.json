@@ -42,6 +42,10 @@
       "type": "runtime"
     },
     {
+      "name": "opentelemetry-exporter-gcp-trace",
+      "type": "runtime"
+    },
+    {
       "name": "opentelemetry-instrumentation-fastapi",
       "type": "runtime"
     },
