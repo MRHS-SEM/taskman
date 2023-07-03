@@ -73,6 +73,17 @@ def create_task(request: TaskRequest,
     backend.set(task_id, request)
     return task_id
 
+# @app.get('/tasks/{task_id}')
+# def get_task2(task_id: str,
+#              backend: Annotated[Backend, Depends(get_backend)]) -> Task:
+#     # get the current tracer
+#     tracer = trace.get_tracer(__name__)
+
+#     # start a new span
+#     with tracer.start_as_current_span("get-task"):
+#         # your existing code goes here
+#         return backend.get(task_id)
+
 provider = TracerProvider()
 cloud_trace_exporter = CloudTraceSpanExporter()
 processor = BatchSpanProcessor(cloud_trace_exporter)
