@@ -57,7 +57,7 @@ def get_tasks(backend: Annotated[Backend, Depends(get_backend)]) -> List[Task]:
 @app.get('/tasks/{task_id}')
 def get_task(task_id: str,
              backend: Annotated[Backend, Depends(get_backend)]) -> Task:
-    with tracer.start_as_current_span("get_task"):
+    # with tracer.start_as_current_span("get_task"):
         return backend.get(task_id)
 
 
