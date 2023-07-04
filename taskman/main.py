@@ -21,6 +21,8 @@ from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from .backends import Backend, RedisBackend, MemoryBackend, GCSBackend
 from .model import Task, TaskRequest
 
+import os
+
 app = FastAPI()
 
 my_backend: Optional[Backend] = None
@@ -54,11 +56,20 @@ def get_tasks(backend: Annotated[Backend, Depends(get_backend)]) -> List[Task]:
     return tasks
 
 
+# @app.get('/tasks/{task_id}')
+# def get_task(task_id: str,
+#              backend: Annotated[Backend, Depends(get_backend)]) -> Task:
+#     with tracer.start_as_current_span("get_task"):
+#         return backend.get(task_id)
+
 @app.get('/tasks/{task_id}')
 def get_task(task_id: str,
              backend: Annotated[Backend, Depends(get_backend)]) -> Task:
-    with tracer.start_as_current_span("get_task"):
-        return backend.get(task_id)
+    if 'CI' not in os.environ:
+        with tracer.start_as_current_span("get_task"):
+            return backend.get_task(task_id)
+    else:
+        return backend.get_task(task_id)
 
 
 @app.put('/tasks/{item_id}')
@@ -75,16 +86,25 @@ def create_task(request: TaskRequest,
     backend.set(task_id, request)
     return task_id
 
-provider = TracerProvider()
-cloud_trace_exporter = CloudTraceSpanExporter()
-processor = BatchSpanProcessor(cloud_trace_exporter)
-#processor = BatchSpanProcessor(ConsoleSpanExporter())
-provider.add_span_processor(processor)
+# provider = TracerProvider()
+# cloud_trace_exporter = CloudTraceSpanExporter()
+# processor = BatchSpanProcessor(cloud_trace_exporter)
+# #processor = BatchSpanProcessor(ConsoleSpanExporter())
+# provider.add_span_processor(processor)
 
-# Sets the global default tracer provider
-trace.set_tracer_provider(provider)
+# # Sets the global default tracer provider
+# trace.set_tracer_provider(provider)
 
-# Creates a tracer from the global tracer provider
-tracer = trace.get_tracer("my.tracer.name")
+# # Creates a tracer from the global tracer provider
+# tracer = trace.get_tracer("my.tracer.name")
 
-FastAPIInstrumentor.instrument_app(app)
+# FastAPIInstrumentor.instrument_app(app)
+
+if 'CI' not in os.environ:
+    provider = TracerProvider()
+    cloud_trace_exporter = CloudTraceSpanExporter()
+    processor = BatchSpanProcessor(cloud_trace_exporter)
+    provider.add_span_processor(processor)
+    trace.set_tracer_provider(provider)
+    tracer = trace.get_tracer("my.tracer.name")
+    FastAPIInstrumentor.instrument_app(app)
