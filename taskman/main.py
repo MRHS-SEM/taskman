@@ -76,16 +76,16 @@ def create_task(request: TaskRequest,
     backend.set(task_id, request)
     return task_id
 
-provider = TracerProvider()
-cloud_trace_exporter = CloudTraceSpanExporter()
-processor = BatchSpanProcessor(cloud_trace_exporter)
-#processor = BatchSpanProcessor(ConsoleSpanExporter())
-provider.add_span_processor(processor)
+# provider = TracerProvider()
+# cloud_trace_exporter = CloudTraceSpanExporter()
+# processor = BatchSpanProcessor(cloud_trace_exporter)
+# #processor = BatchSpanProcessor(ConsoleSpanExporter())
+# provider.add_span_processor(processor)
 
-# Sets the global default tracer provider
-trace.set_tracer_provider(provider)
+# # Sets the global default tracer provider
+# trace.set_tracer_provider(provider)
 
-# Creates a tracer from the global tracer provider
-tracer = trace.get_tracer("my.tracer.name")
+# # Creates a tracer from the global tracer provider
+# tracer = trace.get_tracer("my.tracer.name")
 
-FastAPIInstrumentor.instrument_app(app)
+# FastAPIInstrumentor.instrument_app(app)
