@@ -21,8 +21,6 @@ from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from .backends import Backend, RedisBackend, MemoryBackend, GCSBackend
 from .model import Task, TaskRequest
 
-import os
-
 app = FastAPI()
 
 my_backend: Optional[Backend] = None
@@ -108,3 +106,4 @@ if 'CI' not in os.environ:
     trace.set_tracer_provider(provider)
     tracer = trace.get_tracer("my.tracer.name")
     FastAPIInstrumentor.instrument_app(app)
+    
