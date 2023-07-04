@@ -6,19 +6,20 @@ from typing_extensions import Annotated
 
 from fastapi import Depends, FastAPI
 from starlette.responses import RedirectResponse
-from .backends import Backend, RedisBackend, MemoryBackend, GCSBackend
-from .model import Task, TaskRequest
+
 from opentelemetry import trace
 from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import (
     BatchSpanProcessor,
-    ConsoleSpanExporter,
+    # ConsoleSpanExporter,
 )
-from opentelemetry.trace import Link
+# from opentelemetry.trace import Link
 
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 
+from .backends import Backend, RedisBackend, MemoryBackend, GCSBackend
+from .model import Task, TaskRequest
 
 app = FastAPI()
 
