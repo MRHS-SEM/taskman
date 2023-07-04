@@ -10,7 +10,12 @@ project = PythonProject(
         'fastapi',
         'google-cloud-storage',
         'redis',
-        'uvicorn[standard]'
+        'uvicorn[standard]',
+        'opentelemetry-api',
+        'opentelemetry-sdk',
+        'opentelemetry-instrumentation-fastapi',
+        'opentelemetry-exporter-gcp-trace',
+        'setuptools==65.5.1'
     ],
     dev_deps=[
         'attrs',
@@ -25,8 +30,11 @@ project = PythonProject(
 
 project.add_git_ignore('.idea')
 
+# Add the command to start Redis container to your project
+redis_task = project.add_task("redis")
+redis_task.exec('docker run -d -p 6379:6379 redis')
+
 dev_task = project.add_task('dev')
 dev_task.exec('uvicorn taskman.main:app --reload')
-
 
 project.synth()

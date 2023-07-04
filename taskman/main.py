@@ -6,6 +6,18 @@ from typing_extensions import Annotated
 
 from fastapi import Depends, FastAPI
 from starlette.responses import RedirectResponse
+
+# # from opentelemetry import trace
+# from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
+# from opentelemetry.sdk.trace import TracerProvider
+# from opentelemetry.sdk.trace.export import (
+#     BatchSpanProcessor,
+#     # ConsoleSpanExporter,
+# )
+# # from opentelemetry.trace import Link
+
+# from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+
 from .backends import Backend, RedisBackend, MemoryBackend, GCSBackend
 from .model import Task, TaskRequest
 
@@ -45,6 +57,8 @@ def get_tasks(backend: Annotated[Backend, Depends(get_backend)]) -> List[Task]:
 @app.get('/tasks/{task_id}')
 def get_task(task_id: str,
              backend: Annotated[Backend, Depends(get_backend)]) -> Task:
+    # with tracer.start_as_current_span("get_task"):
+        # return backend.get(task_id)
     return backend.get(task_id)
 
 
@@ -61,3 +75,17 @@ def create_task(request: TaskRequest,
     task_id = str(uuid4())
     backend.set(task_id, request)
     return task_id
+
+# provider = TracerProvider()
+# cloud_trace_exporter = CloudTraceSpanExporter()
+# processor = BatchSpanProcessor(cloud_trace_exporter)
+# #processor = BatchSpanProcessor(ConsoleSpanExporter())
+# provider.add_span_processor(processor)
+
+# # Sets the global default tracer provider
+# trace.set_tracer_provider(provider)
+
+# # Creates a tracer from the global tracer provider
+# tracer = trace.get_tracer("my.tracer.name")
+
+# FastAPIInstrumentor.instrument_app(app)
