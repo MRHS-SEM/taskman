@@ -56,7 +56,9 @@ def get_tasks(backend: Annotated[Backend, Depends(get_backend)]) -> List[Task]:
 @app.get('/tasks/{task_id}')
 def get_task(task_id: str,
              backend: Annotated[Backend, Depends(get_backend)]) -> Task:
-    return backend.get(task_id)
+    with tracer.start_as_current_span("get_task"):
+        return backend.get(task_id)
+
 
 
 @app.put('/tasks/{item_id}')
@@ -72,17 +74,6 @@ def create_task(request: TaskRequest,
     task_id = str(uuid4())
     backend.set(task_id, request)
     return task_id
-
-# @app.get('/tasks/{task_id}')
-# def get_task2(task_id: str,
-#              backend: Annotated[Backend, Depends(get_backend)]) -> Task:
-#     # get the current tracer
-#     tracer = trace.get_tracer(__name__)
-
-#     # start a new span
-#     with tracer.start_as_current_span("get-task"):
-#         # your existing code goes here
-#         return backend.get(task_id)
 
 provider = TracerProvider()
 cloud_trace_exporter = CloudTraceSpanExporter()
