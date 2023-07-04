@@ -7,7 +7,7 @@ from typing_extensions import Annotated
 from fastapi import Depends, FastAPI
 from starlette.responses import RedirectResponse
 
-# from opentelemetry import trace
+from opentelemetry import trace
 from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import (
