@@ -13,9 +13,7 @@ from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import (
     BatchSpanProcessor,
-    # ConsoleSpanExporter,
 )
-# from opentelemetry.trace import Link
 
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 
@@ -54,7 +52,6 @@ def get_tasks(backend: Annotated[Backend, Depends(get_backend)]) -> List[Task]:
         tasks.append(backend.get(key))
     return tasks
 
-
 # @app.get('/tasks/{task_id}')
 # def get_task(task_id: str,
 #              backend: Annotated[Backend, Depends(get_backend)]) -> Task:
@@ -66,9 +63,9 @@ def get_task(task_id: str,
              backend: Annotated[Backend, Depends(get_backend)]) -> Task:
     if 'CI' not in os.environ:
         with tracer.start_as_current_span("get_task"):
-            return backend.get(task_id)  
+            return backend.get(task_id)
     else:
-        return backend.get(task_id)  
+        return backend.get(task_id)
 
 
 @app.put('/tasks/{item_id}')
@@ -88,7 +85,6 @@ def create_task(request: TaskRequest,
 # provider = TracerProvider()
 # cloud_trace_exporter = CloudTraceSpanExporter()
 # processor = BatchSpanProcessor(cloud_trace_exporter)
-# #processor = BatchSpanProcessor(ConsoleSpanExporter())
 # provider.add_span_processor(processor)
 
 # # Sets the global default tracer provider

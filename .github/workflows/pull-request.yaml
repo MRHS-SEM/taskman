@@ -1,4 +1,4 @@
-name: Test and Deploy
+name: Lint, Test and Deploy
 
 on:
   pull_request:
@@ -6,7 +6,28 @@ on:
       - main
 
 jobs:
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: set up Python 
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install pylint
+        run: pip install pylint
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Install development dependencies
+        run: pip install -r requirements-dev.txt
+      - name: Run pylint
+        run: pylint taskman
+
   test:
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -80,64 +101,3 @@ jobs:
           BACKEND=memory
     - name: 'Use output'
       run: 'curl "${{ steps.deploy.outputs.url }}"'
-
-
-# name: Run test suite on PR and deploy
-
-# on:
-#   pull_request:
-#     branches:
-#       - main
-
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v2
-#         with:
-#           fetch-depth: 0
-#       - name: set up Python 
-#         uses: actions/setup-python@v2
-#         with:
-#           python-version: 3.9
-#       - name: Install dependencies
-#         run: pip install -r requirements.txt
-#       - name: Install development dependencies
-#         run: pip install -r requirements-dev.txt
-#       - name: Run pytest
-#         run: pytest --cov=taskman -n auto
-#       #So far the code for Assignment1
-
-#       #For exercise 2 from here
-
-#       #Submit the results to a service measuring the code by codecov
-#       - name: Upload coverage report to Codecov
-#         uses: codecov/codecov-action@v2
-#         with:
-#           token: ${{ secrets.CODECOV_TOKEN }}
-
-#       #Integrate a security scanner into the pipeline that analyses our code and dependencies by snyk.
-#       - name: Set up Node.js
-#         uses: actions/setup-node@v2
-#         with:
-#           node-version: '14'
-#       - name: Install snyk
-#         run: npm install -g snyk
-#       - name: Scan for security vulnerabilities
-#         run: |
-#           snyk auth ${{ secrets.SNYK_TOKEN }}
-#           snyk test --file=requirements.txt
-
-#       # #build a Github container and pushing it to the github container registry.
-#       - name: Login to GitHub Container Registry
-#         uses: docker/login-action@v1
-#         with:
-#           registry: ghcr.io
-#           username: ${{ github.actor }}
-#           password: ${{ secrets.CR_PAT }}
-#       - name: Build and push Docker image
-#         uses: docker/build-push-action@v2
-#         with:
-#           context: .
-#           push: true
-#           tags: ghcr.io/mrhs-sem/my_package:${{ github.sha }}
