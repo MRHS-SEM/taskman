@@ -2,6 +2,7 @@
 from uuid import uuid4
 from typing import List, Optional
 from os import getenv
+import os
 from typing_extensions import Annotated
 
 from fastapi import Depends, FastAPI
@@ -106,4 +107,3 @@ if 'CI' not in os.environ:
     trace.set_tracer_provider(provider)
     tracer = trace.get_tracer("my.tracer.name")
     FastAPIInstrumentor.instrument_app(app)
-    
