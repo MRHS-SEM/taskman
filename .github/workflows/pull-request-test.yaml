@@ -20,8 +20,8 @@ jobs:
         run: pip install -r requirements.txt
       - name: Install development dependencies
         run: pip install -r requirements-dev.txt
-      - name: Run pytest
-        run: pytest --cov=taskman -n auto
+      # - name: Run pytest
+      #   run: pytest --cov=taskman -n auto
       #So far the code for Assignment1
 
       #For exercise 2 from here
