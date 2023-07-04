@@ -66,9 +66,9 @@ def get_task(task_id: str,
              backend: Annotated[Backend, Depends(get_backend)]) -> Task:
     if 'CI' not in os.environ:
         with tracer.start_as_current_span("get_task"):
-            return backend.get_task(task_id)
+            return backend.get(task_id)  
     else:
-        return backend.get_task(task_id)
+        return backend.get(task_id)  
 
 
 @app.put('/tasks/{item_id}')
