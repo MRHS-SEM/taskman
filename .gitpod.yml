@@ -5,7 +5,8 @@ tasks:
   - name: taskman application
     command: projen dev
   - name: Redis
-    command: docker run -p 6379:6379 -p 8001:8001 redis/redis-stack:latest
+    # command: docker run -p 6379:6379 -p 8001:8001 redis/redis-stack:latest
+    command: projen redis
 
 ports:
     - name: Backend
