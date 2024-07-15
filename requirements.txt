@@ -6,5 +6,5 @@ opentelemetry-exporter-gcp-trace
 opentelemetry-instrumentation-fastapi
 opentelemetry-sdk
 redis
-setuptools==65.5.1
+setuptools==70.0.0
 uvicorn[standard]
