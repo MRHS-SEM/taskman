@@ -8,3 +8,5 @@ opentelemetry-sdk
 redis
 setuptools==65.5.1
 uvicorn[standard]
+h11>=0.16.0 # not directly required, pinned by Snyk to avoid a vulnerability
+requests>=2.32.4 # not directly required, pinned by Snyk to avoid a vulnerability
